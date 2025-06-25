@@ -20,6 +20,12 @@ class LoginTest extends Simulation{
       //Validar status 200 del servicio
       .check(status.is(200))
       .check (jsonPath("$.token").saveAs("authToken")) // Guardar el token en una variable
+    ).exec(
+      http("Create Contact")
+      .post(s"contacts")
+      .header("Authorization", "Bearer ${authToken}") // Add JWT token
+      .body(StringBody(s"""{"firstName": "${firstName}", "lastName": "${lastName}","birthdate": "${birthdate}","email": "${contactEmail }", "phone": "${phone}"  }""")).asJson
+      .check(status.is(200))
     )
 
   // 3 Load Scenario
