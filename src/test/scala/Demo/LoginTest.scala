@@ -23,7 +23,7 @@ class LoginTest extends Simulation{
     ).exec(
       http("Create Contact")
       .post(s"contacts")
-      .header("Authorization", "Bearer ${authToken}") // Add JWT token
+      .header("Authorization", session => s"Bearer ${session("authToken").as[String]}")
       .body(StringBody(s"""{"firstName": "${firstName}", "lastName": "${lastName}","birthdate": "${birthdate}","email": "${contactEmail }", "phone": "${phone}"  }""")).asJson
       .check(status.is(200))
     )
